@@ -9,22 +9,69 @@
       margin: 0;
       padding: 0;
       height: 100vh;
-      overflow-x: hidden;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: linear-gradient(135deg, #ffafbd, #ffc3a0);
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      color: #fff;
     }
 
     h1 {
       font-size: 3rem;
-      margin-top: 20px;
+      color: #fff;
       text-shadow: 2px 2px 6px #ff69b4;
+      text-align: center;
       opacity: 0;
       transform: scale(0.8);
       transition: all 1s ease-in-out;
     }
     h1.show { opacity: 1; transform: scale(1); }
+
+    /* Slideshow */
+    .slideshow {
+      width: 80vw;
+      height: 60vh;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      margin: 20px auto;
+    }
+    .slideshow img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* FIX: show whole photo without cropping */
+      display: none;
+    }
+    .slideshow img.active { display: block; }
+
+    /* Buttons */
+    #surpriseBtn, .videoBtn {
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 30px;
+      background: #ff69b4;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #surpriseBtn:hover, .videoBtn:hover { transform: scale(1.1); }
+
+    #message {
+      display: none;
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: #fff;
+      text-shadow: 1px 1px 4px #ff1493;
+      animation: fadeIn 2s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* Balloons */
     .balloon {
@@ -35,7 +82,6 @@
       border-radius: 50%;
       background-color: pink;
       animation: float 8s linear infinite;
-      z-index: 1;
     }
     .balloon::after {
       content: '';
@@ -52,130 +98,71 @@
       100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
     }
 
-    /* Buttons */
-    #controls {
-      margin: 20px 0;
-    }
-    button {
-      margin: 10px;
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 30px;
-      background: #ff69b4;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-    button:hover { transform: scale(1.1); }
-
-    #message {
-      display: none;
-      margin: 20px auto;
-      max-width: 600px;
-      font-size: 1.4rem;
-      text-shadow: 1px 1px 4px #ff1493;
-      animation: fadeIn 2s ease-in-out forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Slideshow */
-    .slideshow {
-      position: relative;
-      margin: 30px auto;
-      width: 90%;
-      max-width: 600px;
-      height: 350px;
-      overflow: hidden;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-    .slideshow img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .slideshow img.active { opacity: 1; }
-
-    /* Popup Video Modal */
-    .modal {
+    /* Video Popup */
+    .popup {
       display: none;
       position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
+      top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
     }
-    .modal-content {
-      position: relative;
-      background: #000;
-      padding: 10px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 700px;
+    .popup video {
+      width: 80%;
+      max-height: 80%;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
     }
-    .modal video {
-      width: 100%;
-      border-radius: 10px;
-    }
-    .close {
+    .closeBtn {
       position: absolute;
-      top: 10px; right: 15px;
-      color: #fff;
-      font-size: 30px;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1 id="title">🎂 Happy Birthday Wifey 🎂</h1>
+  <div>
+    <h1 id="title">🎂 Happy Birthday Wifey 🎂</h1>
 
-  <div id="controls">
+    <!-- Slideshow -->
+    <div class="slideshow" id="slideshow">
+      <img src="photo1.jpg" class="active">
+      <img src="photo2.jpg">
+      <img src="photo3.jpg">
+      <img src="photo4.jpg">
+      <img src="photo5.jpg">
+      <img src="photo6.jpg">
+      <img src="photo7.jpg">
+      <img src="photo8.jpg">
+      <img src="photo9.jpg">
+      <img src="photo10.jpg">
+      <img src="photo11.jpg">
+    </div>
+
     <button id="surpriseBtn">Click for Surprise 💖</button>
-    <button id="videoBtn">Play Special Video 🎥</button>
-  </div>
+    <p id="message">My love, you make my world brighter every day 🌸. Wishing you endless happiness today and always 💕</p>
 
-  <p id="message">My love, you make my world brighter every day 🌸. Wishing you endless happiness today and always 💕</p>
-
-  <!-- Photo Slideshow -->
-  <div class="slideshow" id="slideshow">
-    <img src="photo1.jpg" class="active" />
-    <img src="photo2.jpg" />
-    <img src="photo3.jpg" />
-    <img src="photo4.jpg" />
-    <img src="photo5.jpg" />
-    <img src="photo6.jpg" />
-    <img src="photo7.jpg" />
-    <img src="photo8.jpg" />
-    <img src="photo9.jpg" />
-    <img src="photo10.jpg" />
-    <img src="photo11.jpg" />
-  </div>
-
-  <!-- Popup Video Modal -->
-  <div id="videoModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <video id="videoPlayer" controls>
-        <source src="video1.mp4" type="video/mp4">
-        <source src="video2.mp4" type="video/mp4">
-        <source src="video3.mp4" type="video/mp4">
-        <source src="video4.mp4" type="video/mp4">
-        Your browser does not support video.
-      </video>
+    <!-- Video buttons -->
+    <div>
+      <button class="videoBtn" data-video="video1.mp4">🎥 Video 1</button>
+      <button class="videoBtn" data-video="video2.mp4">🎥 Video 2</button>
+      <button class="videoBtn" data-video="video3.mp4">🎥 Video 3</button>
+      <button class="videoBtn" data-video="video4.mp4">🎥 Video 4</button>
     </div>
   </div>
 
-  <audio id="song" src="your_song.mp3"></audio>
+  <!-- Background song -->
+  <audio id="song" src="your_song.mp3" loop></audio>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <span class="closeBtn" id="closePopup">&times;</span>
+    <video id="popupVideo" controls></video>
+  </div>
 
   <script>
     // Show title
@@ -201,16 +188,10 @@
       return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    // Surprise button
-    document.getElementById("surpriseBtn").addEventListener("click", () => {
-      document.getElementById("message").style.display = "block";
-      document.getElementById("song").play();
-    });
-
     // Slideshow
     let slideIndex = 0;
     function startSlideshow() {
-      const slides = document.querySelectorAll("#slideshow img");
+      const slides = document.querySelectorAll(".slideshow img");
       setInterval(() => {
         slides[slideIndex].classList.remove("active");
         slideIndex = (slideIndex + 1) % slides.length;
@@ -218,15 +199,33 @@
       }, 3000);
     }
 
-    // Video Popup
-    const modal = document.getElementById("videoModal");
-    const videoBtn = document.getElementById("videoBtn");
-    const closeModal = document.getElementById("closeModal");
-    const videoPlayer = document.getElementById("videoPlayer");
+    // Surprise button
+    document.getElementById("surpriseBtn").addEventListener("click", () => {
+      document.getElementById("message").style.display = "block";
+      document.getElementById("song").play();
+    });
 
-    videoBtn.onclick = () => { modal.style.display = "flex"; videoPlayer.play(); };
-    closeModal.onclick = () => { modal.style.display = "none"; videoPlayer.pause(); };
-    window.onclick = (e) => { if (e.target == modal) { modal.style.display = "none"; videoPlayer.pause(); } };
+    // Video popup
+    const popup = document.getElementById("popup");
+    const popupVideo = document.getElementById("popupVideo");
+    const bgSong = document.getElementById("song");
+
+    document.querySelectorAll(".videoBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const videoSrc = btn.getAttribute("data-video");
+        popup.style.display = "flex";
+        popupVideo.src = videoSrc;
+        popupVideo.play();
+        bgSong.pause(); // stop music when video plays
+      });
+    });
+
+    document.getElementById("closePopup").addEventListener("click", () => {
+      popup.style.display = "none";
+      popupVideo.pause();
+      popupVideo.src = "";
+      bgSong.play(); // resume music when video closes
+    });
   </script>
 </body>
 </html>
